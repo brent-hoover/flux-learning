@@ -5,7 +5,7 @@ namespace: production
 
 resources:
 - namespace.yaml
-- ../base
+- ../../../infrastructure/base
 
 patches:
 - patch: |-
