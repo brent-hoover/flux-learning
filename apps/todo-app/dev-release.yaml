@@ -1,0 +1,44 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: todo-app
+  namespace: dev
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: ./charts/todo-app
+      sourceRef:
+        kind: GitRepository
+        name: todo-app
+        namespace: flux-system
+  values:
+    environment: development
+    replicaCount: 1
+    image:
+      repository: brenthoover/todo-app  # Using GitHub Container Registry
+      tag: "latest"
+    ingress:
+      enabled: true
+      className: "nginx-dev"
+      hosts:
+        - host: todo-dev.local
+          paths:
+            - path: /
+              pathType: Prefix
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 50m
+        memory: 64Mi
+    postgresql:
+      primary:
+        resources:
+          limits:
+            memory: 128Mi
+            cpu: 100m
+          requests:
+            memory: 64Mi
+            cpu: 50m

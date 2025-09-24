@@ -1,0 +1,51 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: todo-app
+  namespace: production
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: ./charts/todo-app
+      sourceRef:
+        kind: GitRepository
+        name: todo-app
+        namespace: flux-system
+  values:
+    environment: production
+    replicaCount: 3
+    image:
+      repository: brenthoover/todo-app
+      tag: "v1.0.0"
+    ingress:
+      enabled: true
+      className: "nginx-production"
+      hosts:
+        - host: todo.example.com
+          paths:
+            - path: /
+              pathType: Prefix
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+    autoscaling:
+      enabled: true
+      minReplicas: 3
+      maxReplicas: 10
+      targetCPUUtilizationPercentage: 70
+    postgresql:
+      primary:
+        resources:
+          limits:
+            memory: 1Gi
+            cpu: 500m
+          requests:
+            memory: 512Mi
+            cpu: 250m
+        persistence:
+          size: 20Gi

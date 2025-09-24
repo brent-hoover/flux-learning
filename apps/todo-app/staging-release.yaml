@@ -1,0 +1,46 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: todo-app
+  namespace: staging
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: ./charts/todo-app
+      sourceRef:
+        kind: GitRepository
+        name: todo-app
+        namespace: flux-system
+  values:
+    environment: staging
+    replicaCount: 2
+    image:
+      repository: brenthoover/todo-app
+      tag: "staging"
+    ingress:
+      enabled: true
+      className: "nginx-staging"
+      hosts:
+        - host: todo-staging.local
+          paths:
+            - path: /
+              pathType: Prefix
+    resources:
+      limits:
+        cpu: 200m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    postgresql:
+      primary:
+        resources:
+          limits:
+            memory: 256Mi
+            cpu: 200m
+          requests:
+            memory: 128Mi
+            cpu: 100m
+        persistence:
+          size: 5Gi

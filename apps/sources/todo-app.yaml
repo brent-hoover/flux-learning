@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: todo-app
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/brent-hoover/todo-app  # You'll need to create this repo
+  ref:
+    branch: develop
