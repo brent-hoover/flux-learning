@@ -17,7 +17,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infrastructure-ingress
+  name: ingress-nginx-dev
   namespace: flux-system
 spec:
   dependsOn:
@@ -28,5 +28,39 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infrastructure/ingress-nginx
+  path: ./infrastructure/ingress-nginx/dev
+  prune: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: ingress-nginx-staging
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: infrastructure-sources
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/ingress-nginx/staging
+  prune: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: ingress-nginx-production
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: infrastructure-sources
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/ingress-nginx/production
   prune: true

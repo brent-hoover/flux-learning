@@ -1,0 +1,20 @@
+controller:
+  replicaCount: 1
+
+  ingressClassResource:
+    name: nginx-dev
+    default: false
+
+  service:
+    type: ClusterIP
+
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+
+  nodeSelector:
+    kubernetes.io/os: linux

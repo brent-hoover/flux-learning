@@ -1,0 +1,33 @@
+controller:
+  replicaCount: 2
+
+  ingressClassResource:
+    name: nginx-staging
+    default: false
+
+  service:
+    type: ClusterIP
+
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  nodeSelector:
+    kubernetes.io/os: linux
+
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - ingress-nginx
+          topologyKey: kubernetes.io/hostname
