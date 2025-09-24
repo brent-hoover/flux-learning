@@ -6,6 +6,8 @@ namespace: staging
 resources:
 - namespace.yaml
 - ../../../infrastructure/base
+- ingress-nginx-values.yaml
+- ingress-nginx-helmrelease.yaml
 
 patches:
 - patch: |-
