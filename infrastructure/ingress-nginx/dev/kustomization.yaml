@@ -7,5 +7,7 @@ resources:
 
 configMapGenerator:
 - name: ingress-nginx-values
+  options:
+    disableNameSuffixHash: true
   files:
-  - values.yaml=../values-dev.yaml
+  - values.yaml=values-dev.yaml
